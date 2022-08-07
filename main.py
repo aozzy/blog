@@ -27,7 +27,6 @@ gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=Fa
                     base_url=None)
 
 
-
 ##CONFIGURE TABLES
 
 class BlogPost(db.Model):
@@ -176,6 +175,9 @@ def contact():
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("You need to login or register")
+            return redirect(url_for("login"))
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
@@ -190,7 +192,7 @@ def add_new_post():
     return render_template("make-post.html", form=form)
 
 
-@app.route("/edit-post/<int:post_id>")
+@app.route("/edit-post/<int:post_id>", methods=[ 'GET','POST'])
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
@@ -204,7 +206,7 @@ def edit_post(post_id):
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
         post.img_url = edit_form.img_url.data
-        post.author = edit_form.author.data
+        post.author = post.author
         post.body = edit_form.body.data
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
