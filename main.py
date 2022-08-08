@@ -13,12 +13,14 @@ import os
 from sqlalchemy import Table, Column, Integer, ForeignKey
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL1",  "sqlite:///blog.db")
+app.config['SECRET_KEY'] = os.environ.get("SECRET", "8BYkEfBA6O6donzWlSihBXox7C0sKR6b")
+# app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 ##CONNECT TO DB
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL1", "sqlite:///blog.db")
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -193,7 +195,7 @@ def add_new_post():
     return render_template("make-post.html", form=form)
 
 
-@app.route("/edit-post/<int:post_id>", methods=[ 'GET','POST'])
+@app.route("/edit-post/<int:post_id>", methods=['GET', 'POST'])
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
@@ -225,5 +227,4 @@ def delete_post(post_id):
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port,)
-# debug = True
+    app.run(host='0.0.0.0', port=port)
