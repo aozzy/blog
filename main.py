@@ -13,7 +13,7 @@ import os
 from sqlalchemy import Table, Column, Integer, ForeignKey
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  "sqlite:///blog.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL1",  "sqlite:///blog.db")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
